@@ -1,0 +1,25 @@
+- become: yes
+  hosts: all
+  name: install_neovim
+
+  tasks:
+
+    - name: Install Valet Dependencies
+      apt: name={{ item }} update_cache=no state=latest
+      register: install_valet_deps
+      until: install_valet_deps is not failed
+      delay: 6
+      retries: 100
+      with_items:
+        - network-manager
+        - libnss3-tools
+        - jq
+        - xsel
+        - php8.2-cli
+        - php8.2-curl
+        - php8.2-mbstring
+        - php8.2-mcrypt
+        - php8.2-xml
+        - php8.2-zip
+      become: yes
+

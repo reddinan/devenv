@@ -5,13 +5,13 @@
   tasks:
     - name: "Check if Neovim is installed in /usr/bin/nvim"
       stat:
-        path: /usr/bin/nvim
+        path: /usr/local/bin/nvim
       register: nvim_installed
 
     - name: "Download Neovim"
       ansible.builtin.get_url:
         url: "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage"
-        dest: /usr/bin/nvim
+        dest: /usr/local/bin/nvim
         mode: '0555'
         force: true
       when: not nvim_installed.stat.exists

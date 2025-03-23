@@ -1,13 +1,21 @@
 - become: yes
   hosts: all
   tasks:
-    - name: Ensure group "somegroup" exists
+    - name: Ensure group for user exists
       ansible.builtin.group:
-        name: andrew
+        name: "{{ username }}"
         state: present
  
-    - name: Add the user andrew
+    - name: Create the user 
       user:
-        name: andrew
+        name: "{{ username }}"
         shell: /bin/bash
-        group: andrew
+        group: "{{ username }}"
+        password: "{{ 'password' | password_hash('sha512') }}"
+
+    - name: Ensure user is in the sudoers file
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ username }} ALL=(ALL) NOPASSWD:ALL"
+        validate: "visudo -cf %s"
+        state: present

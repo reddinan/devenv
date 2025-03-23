@@ -1,21 +1,31 @@
-- become: no
+- become: yes
+  become_user: "{{ username }}"
+  become_method: su
   hosts: all
   name: install_nvin_config
 
   tasks:
     - name: Create a directory if it does not exist
       ansible.builtin.file:
-        path: /home/andrew/.config
+        path: "/home/{{ username }}/.config"
         state: directory
-        owner: andrew
-        mode: '0755'
+        owner: "{{ username }}"
+        mode: '0710'
 
     - name: "Download nvim config from github"
       git: >
-        dest=/home/andrew/.config/nvim
+        dest="/home/{{ username }}/.config/nvim"
         clone=true
         repo=https://github.com/reddinan/kickstart.nvim.git
         update=yes
         accept_hostkey=yes
       register: cloned
+
+    #- name: "Set owner of config as the specified user"
+      #  ansible.builtin.file:
+      #  path: "/home/{{ username }}/.config"
+      #  state: directory
+      #  recurse: yes
+      #  owner: "{{ username }}"
+      #  group: "{{ username }}"
 

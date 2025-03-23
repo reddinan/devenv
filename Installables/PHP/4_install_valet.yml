@@ -1,0 +1,35 @@
+- become: yes
+  become_user: "{{ username }}"
+  become_method: su
+  hosts: all
+  name: install_valet
+
+  tasks:
+    - name: Install Laravel Valet using Composer
+      community.general.composer:
+        command: require
+        global_command: true
+        arguments: cpriego/valet-linux 
+      register: valet_installed
+
+    - name: Create sites directory
+      ansible.builtin.file:
+        path: "/home/{{ username }}/sites"
+        state: directory
+        owner: "{{ username }}"
+        mode: '0775'
+
+    - name: Install Valet
+      shell: "/home/{{ username }}/.config/composer/vendor/cpriego/valet-linux/valet install" 
+      register: run_valet_install
+
+    #    - name: Install Valet in sites directory
+      #  ansible.builtin.expect: 
+        #  command: "/home/{{ username }}/.config/composer/vendor/cpriego/valet-linux/valet install"
+        #chdir: "/home/{{ username }}/sites"
+        #echo: no
+        #responses:
+        #  ".*": "password"
+      #register: run_valet_install
+
+    - debug: msg="{{ run_valet_install }}"
