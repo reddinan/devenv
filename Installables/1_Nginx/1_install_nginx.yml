@@ -1,0 +1,14 @@
+- become: yes
+  hosts: all
+  name: install_nginx
+
+  tasks:
+    - name: Install Nginx
+      apt: name={{ item }} update_cache=no state=latest
+      register: install_packages
+      until: install_packages is not failed
+      delay: 6
+      retries: 100
+      with_items:
+        - nginx
+      become: yes
