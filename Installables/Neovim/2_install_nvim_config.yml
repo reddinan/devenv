@@ -1,0 +1,14 @@
+- become: no
+  hosts: all
+  name: install_nvin_config
+
+  tasks:
+    - name: "Download nvim config from github"
+      git: >
+        dest=~/home/andrew/.config/nvim
+        clone=true
+        repo=https://github.com/reddinan/kickstart.nvim.git
+        update=yes
+        accept_hostkey=yes
+      register: cloned
+

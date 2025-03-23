@@ -1,0 +1,17 @@
+FROM ubuntu:22.04
+
+LABEL maintainer="Kitty Bird"
+
+WORKDIR /
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV TZ=UTC
+
+EXPOSE 8000
+
+COPY install.sh /code/install.sh
+
+ENTRYPOINT ["tail"]
+CMD ["-f","/dev/null"]
+
+

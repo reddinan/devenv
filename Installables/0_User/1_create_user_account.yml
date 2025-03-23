@@ -1,0 +1,13 @@
+- become: yes
+  hosts: all
+  tasks:
+    - name: Ensure group "somegroup" exists
+      ansible.builtin.group:
+        name: andrew
+        state: present
+ 
+    - name: Add the user andrew
+      user:
+        name: andrew
+        shell: /bin/bash
+        group: andrew

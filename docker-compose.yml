@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  web:
+    build:
+      dockerfile: DockerFile
+    volumes:
+      - '.:/code'
+    image: sail-8.2/app
