@@ -1,0 +1,29 @@
+- become: yes
+  hosts: all
+  name: install_neovim
+
+  tasks:
+    - name: Check if composer has already been installed
+      stat:
+        path: /usr/local/bin/composer
+      register: composer_installed
+
+    - name: Download composer installer
+      ansible.builtin.get_url:
+        url: "https://getcomposer.org/installer"
+        dest: /tmp/install_composer.sh
+        mode: '0555'
+        force: true
+      when: not composer_installed.stat.exists
+
+    - name: Run composer installer
+      shell: php /tmp/install_composer.sh --install-dir=/usr/local/bin --filename=composer
+      args:
+          creates: /usr/local/bin/composer
+      register: composer_install
+      when: not composer_installed.stat.exists
+
+    - name: Remove composer install script
+      file:
+        path: /tmp/install_composer.sh
+        state: absent
